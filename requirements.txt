@@ -1,2 +1,6 @@
 streamlit
-#※これが「Streamlitを使ってね」という指示書になります
+pandas
+gspread
+google-auth
+altair
+openpyxl
