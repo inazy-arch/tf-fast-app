@@ -109,6 +109,9 @@ def page_top():
     
     # 募集中の大会を探す
     open_comps = [c for c in comps if c.get("status") == "募集中" and c["date"] >= today_str]
+
+    def change_page(page_name):
+        st.session_state["member_menu_radio"] = page_name
     
     if not open_comps:
         st.info("現在、募集中の大会はありません。")
@@ -118,9 +121,8 @@ def page_top():
             with st.container(border=True):
                 st.write(f"**{c['name']}** (📅 {c['date']})")
                 st.caption(f"締切: {c['deadline']}")
-                if st.button("詳細・エントリーへ", key=f"go_entry_{c['id']}"):
-                    st.session_state["menu_selection"] = "エントリー募集一覧"
-                    st.rerun()
+                st.button("詳細・エントリーへ", key=f"go_entry_{c['id']}",
+                          on_click=change_page, args=("エントリー募集一覧",))
 
 
 # ==========================================

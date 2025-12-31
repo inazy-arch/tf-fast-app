@@ -4,7 +4,7 @@ import utils
 from views import public, member, admin
 
 # --- ⚙️ 設定 ---
-st.set_page_config(page_title="UEC T&F Portal", layout="wide", page_icon="🏃")
+st.set_page_config(page_title="UEC T&F Portal", layout="wide", page_icon="uec_tf_icon.jpg")
 utils.apply_custom_css()  # デザイン適用
 
 # --- 🔐 セッション初期化 ---

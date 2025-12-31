@@ -145,21 +145,26 @@ def page_home():
     </div>
     """, unsafe_allow_html=True)
 
+    # コールバック関数（ボタンが押されたら実行される関数）を定義
+    def change_page(page_name):
+        st.session_state["public_menu_radio"] = page_name
+
     # シンプルなナビゲーション
     c1, c2, c3 = st.columns(3)
     
-    # 画面遷移ヘルパー
-    def go(page):
-        # app.py の st.radio の key と同じ名前に合わせる
-        st.session_state["public_menu_radio"] = page 
-        st.rerun()
+    
 
     with c1:
-        if st.button("🏃 部員紹介", use_container_width=True): go("Members")
+        # on_click=change_page, args=("Members",) を指定することで、
+        # ボタンを押した瞬間に安全にページを切り替えます
+        st.button("🏃 部員紹介", use_container_width=True, 
+                  on_click=change_page, args=("Members",))
     with c2:
-        if st.button("🏆 大会結果", use_container_width=True): go("Result")
+        st.button("🏆 大会結果", use_container_width=True, 
+                  on_click=change_page, args=("Result",))
     with c3:
-        if st.button("📝 ブログ", use_container_width=True): go("Blog")
+        st.button("📝 ブログ", use_container_width=True, 
+                  on_click=change_page, args=("Blog",))
     
     st.divider()
 
