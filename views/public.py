@@ -150,7 +150,8 @@ def page_home():
     
     # 画面遷移ヘルパー
     def go(page):
-        st.session_state["public_menu"] = page
+        # app.py の st.radio の key と同じ名前に合わせる
+        st.session_state["public_menu_radio"] = page 
         st.rerun()
 
     with c1:
