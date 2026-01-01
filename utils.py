@@ -185,7 +185,7 @@ def apply_custom_css():
         }
 
         /* ▼▼▼ 修正: 以下の行を削除するか、コメントアウトしてください ▼▼▼ */
-        /* #MainMenu {visibility: hidden;} */   <-- これが原因です！
+        MainMenu {visibility: hidden;} 
         footer {visibility: hidden;}
         </style>
     """, unsafe_allow_html=True)
