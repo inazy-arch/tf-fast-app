@@ -71,6 +71,26 @@ def page_top():
             
             for i, todo in enumerate(todo_list):
                 st.markdown(f"**{todo['comp_name']}** - {todo['event']}")
+
+                # --- 👇 ここを修正：スマホ向けに2列にする ---
+                c1, c2 = st.columns(2)
+                
+                k_base = f"{todo['comp_id']}_{todo['event']}"
+                
+                # 左側
+                with c1:
+                    res = st.text_input("記録", key=f"r_{k_base}", placeholder="例: 10.50")
+                    rank = st.text_input("順位", key=f"rk_{k_base}", placeholder="例: 1")
+                
+                # 右側
+                with c2:
+                    wind = st.text_input("風", key=f"w_{k_base}", placeholder="+1.5")
+                    comment = st.text_input("備考", key=f"cm_{k_base}", placeholder="PB更新！")
+                
+                st.divider()
+                # ----------------------------------------
+                # ----------------------------------------
+                """
                 c1, c2, c3, c4 = st.columns(4)
                 
                 # keyを一意にする
@@ -81,7 +101,8 @@ def page_top():
                 comment = c4.text_input("備考", key=f"cm_{k_base}")
                 
                 st.divider()
-                
+                """
+                # ----------------------------------------
                 if res: # 記録が入力されたものだけ送信対象
                     results_to_submit.append({
                         "comp_id": todo["comp_id"],

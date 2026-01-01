@@ -663,3 +663,71 @@ def save_blog(blog_data):
         load_blogs.clear()
         return True
     except: return False
+
+# --- db.py の末尾に追加 ---
+
+def get_user_best_in_period(user_id, event, start_date=None, end_date=None):
+    """
+    指定された期間内での、特定のユーザー・種目のベスト記録データを返します。
+    （トラック種目はタイムの最小値、フィールド種目は距離の最大値をベストとみなします）
+    """
+    # 1. 全リザルトを読み込む
+    results = load_results(None)
+    
+    # 2. 対象の記録をフィルタリング（抽出）
+    targets = []
+    for r in results:
+        # IDチェック
+        if str(r.get("user_id")) != str(user_id): continue
+        # 種目チェック
+        if r.get("event") != event: continue
+        
+        # 日付チェック（期間指定がある場合のみ）
+        r_date = r.get("date") # "YYYY-MM-DD"形式
+        if not r_date: continue
+        
+        if start_date and r_date < start_date: continue
+        if end_date and r_date > end_date: continue
+        
+        targets.append(r)
+
+    if not targets:
+        return None
+
+    # 3. ベスト記録を選定するロジック
+    best_record = None
+    best_val = None
+    
+    # 簡易判定: 種目名に特定の文字が含まれる場合は「フィールド種目（大きい方が良い）」とする
+    # それ以外は「トラック種目（小さい方が良い）」とする
+    is_field = False
+    field_keywords = ["跳", "投", "砲丸", "円盤", "やり", "ハンマー", "ジャベリックス"]
+    for k in field_keywords:
+        if k in event:
+            is_field = True
+            break
+
+    for r in targets:
+        try:
+            # 記録を数値に変換してみる
+            val = float(str(r["result"]).strip())
+        except:
+            # 数値にできないもの（DNS, NM, 欠場など）はスキップ
+            continue
+
+        if best_val is None:
+            best_val = val
+            best_record = r
+        else:
+            if is_field:
+                # フィールド: 数値が大きい方が良い
+                if val > best_val:
+                    best_val = val
+                    best_record = r
+            else:
+                # トラック: 数値（タイム）が小さい方が良い
+                if val < best_val:
+                    best_val = val
+                    best_record = r
+                    
+    return best_record

@@ -10,8 +10,8 @@ import re
 from datetime import datetime, date
 
 def page_competition_reg():
-    st.title("🏆 新規大会登録 (競技会)")
-    with st.form("comp_reg"):
+        st.title("🏆 新規大会登録 (競技会)")
+    #with st.form("comp_reg"):わるさ
         name = st.text_input("大会名")
         date_val = st.date_input("開催日")
         deadline = st.date_input("締切")
@@ -19,26 +19,27 @@ def page_competition_reg():
         
         st.markdown("---")
         st.write("⏱️ **資格記録の有効期間設定**")
-        use_period = st.checkbox("有効期間を指定する（例: シーズンベストのみ）", value=False)
-        
+        use_q_period = st.checkbox("有効資格記録の期間を設定する")
+        st.caption("※ 指定しない場合、過去すべての期間のベスト記録(PB)が参照されます。")
+
+        q_start = None
+        q_end = None
+
         c1, c2 = st.columns(2)
-        if use_period:
+        if use_q_period:
             this_year = date.today().year
-            valid_start = c1.date_input("開始日", value=date(this_year, 1, 1))
-            valid_end = c2.date_input("終了日", value=date_val)
-        else:
-            valid_start = None
-            valid_end = None
-            st.caption("※ 指定しない場合、過去すべての期間のベスト記録(PB)が参照されます。")
+            q_start = c1.date_input("資格有効開始")
+            q_end = c2.date_input("資格有効終了")
+            
             
         st.markdown("---")
         evs = st.multiselect("募集種目", utils.EVENT_OPTIONS, default=utils.EVENT_OPTIONS)
         status = st.selectbox("初期ステータス", ["募集中", "準備中"])
 
-        if st.form_submit_button("登録"):
+        if st.button("登録", type="primary"):
             data = {
                 "name": name, "date": date_val, "deadline": deadline, "location": loc, 
-                "events": evs, "status": status, "valid_start": valid_start, "valid_end": valid_end
+                "events": evs, "status": status, "valid_start": q_start, "valid_end": q_end
             }
             if db.save_competition(data):
                 st.success("登録しました")

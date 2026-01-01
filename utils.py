@@ -189,3 +189,32 @@ def apply_custom_css():
         footer {visibility: hidden;}
         </style>
     """, unsafe_allow_html=True)
+
+# utils.py の一番下に追加
+
+def apply_mobile_css():
+    """スマホなどのモバイル表示を最適化するCSS"""
+    st.markdown("""
+        <style>
+        /* 1. 全体の余白を詰める */
+        .block-container {
+            padding-top: 1.5rem !important;
+            padding-bottom: 2rem !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        /* 2. スマホでボタンが縦長になりすぎないようにする */
+        .stButton button {
+            width: 100%;
+            border-radius: 8px; /* 角丸を少し優しく */
+            font-weight: bold;
+        }
+        
+        /* 3. エクスパンダー（折りたたみ）を見やすく */
+        .streamlit-expanderHeader {
+            background-color: #f0f2f6;
+            border-radius: 8px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
